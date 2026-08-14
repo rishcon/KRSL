@@ -7,7 +7,7 @@ set "VIDEO_ROOT=V2_videos_5signers_isolated_signs\V2_videos_5signers_isolated_si
 set "KEYPOINT_ROOT=V2_keypoints_5signers_isolated_signs\V2_keypoints_5signers_isolated_signs"
 set "MODEL=models\holistic_landmarker.task"
 
-echo [1/4] Checking Python environment...
+echo [1/5] Checking Python environment...
 if not exist "%PYTHON%" (
   py -3.12 -m venv .venv
   if errorlevel 1 goto :error
@@ -17,14 +17,14 @@ if not exist "%PYTHON%" (
   if errorlevel 1 goto :error
 )
 
-echo [2/4] Checking MediaPipe model...
+echo [2/5] Checking MediaPipe model...
 if not exist "%MODEL%" (
   if not exist models mkdir models
   curl -L --fail --output "%MODEL%" "https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/latest/holistic_landmarker.task"
   if errorlevel 1 goto :error
 )
 
-echo [3/4] Building KRSL20 manifest and signer-independent split...
+echo [3/5] Building KRSL20 manifest and signer-independent split...
 "%PYTHON%" scripts\build_krsl20_manifest.py ^
   --video-root "%VIDEO_ROOT%" ^
   --keypoint-root "%KEYPOINT_ROOT%" ^
@@ -33,7 +33,7 @@ echo [3/4] Building KRSL20 manifest and signer-independent split...
   --split-config splits\krsl20_signer_independent_v1.json
 if errorlevel 1 goto :error
 
-echo [4/4] Extracting holistic-v1 features. Existing valid artifacts will be skipped.
+echo [4/5] Extracting holistic-v1 features. Existing valid artifacts will be skipped.
 "%PYTHON%" scripts\extract_holistic_batch.py ^
   --manifest data\manifests\krsl20_v1.csv ^
   --video-root "%VIDEO_ROOT%" ^
@@ -43,8 +43,16 @@ echo [4/4] Extracting holistic-v1 features. Existing valid artifacts will be ski
   --summary reports\processing\holistic-v1_summary.json
 if errorlevel 1 goto :error
 
+echo [5/5] Building normalized 70-step training sequences.
+"%PYTHON%" scripts\build_training_sequences.py ^
+  --manifest data\manifests\krsl20_v1.csv ^
+  --artifact-root data\processed\holistic-v1 ^
+  --output-root data\interim\training-sequence-v1 ^
+  --report reports\processing\training-sequence-v1_summary.json
+if errorlevel 1 goto :error
+
 echo.
-echo Done. Summary: reports\processing\holistic-v1_summary.json
+echo Done. Summaries are in reports\processing\.
 pause
 exit /b 0
 

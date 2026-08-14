@@ -30,6 +30,10 @@
 - Validated all 5,242 `holistic-v1` artifacts: no invalid files; 77,108 total
   frames; median sequence length 13 frames and maximum 60. Phase 3 will pad
   sequences to 70 frames rather than truncate them.
+- Phase 3 preparation started: `training-sequence-v1` centers coordinates on
+  the shoulders, scales by shoulder width, selects compact landmarks, creates
+  70-step sequences, and excludes manifest rows whose folder conflicts with
+  their label.
 
 ## Commands
 

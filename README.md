@@ -74,3 +74,13 @@ python scripts/analyze_holistic_quality.py `
   --artifact-root .\data\processed\holistic-v1 `
   --report .\reports\processing\holistic-v1_quality.json
 ```
+
+Build local, fixed-length tensors for training:
+
+```powershell
+python scripts/build_training_sequences.py `
+  --manifest .\data\manifests\krsl20_v1.csv `
+  --artifact-root .\data\processed\holistic-v1 `
+  --output-root .\data\interim\training-sequence-v1 `
+  --report .\reports\processing\training-sequence-v1_summary.json
+```
