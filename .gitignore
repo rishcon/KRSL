@@ -29,4 +29,5 @@ reports/experiments/
 reports/processing/
 artifacts/
 checkpoints/
-models/
+models/*
+!models/*.pt

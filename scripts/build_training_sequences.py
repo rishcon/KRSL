@@ -24,6 +24,7 @@ def main() -> None:
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--include-velocity", action="store_true")
     args = parser.parse_args()
     args.output_root.mkdir(parents=True, exist_ok=True)
     included = excluded = failed = 0
@@ -39,10 +40,15 @@ def main() -> None:
             output_path = args.output_root / f"{row['sample_id']}.npz"
             try:
                 with np.load(artifact_path) as artifact:
-                    features, mask = build_sequence({key: artifact[key] for key in artifact.files})
+                    features, mask = build_sequence(
+                        {key: artifact[key] for key in artifact.files},
+                        include_velocity=args.include_velocity,
+                    )
                 np.savez_compressed(
                     output_path,
-                    schema_version=SEQUENCE_SCHEMA_VERSION,
+                    schema_version="training-sequence-v2"
+                    if args.include_velocity
+                    else SEQUENCE_SCHEMA_VERSION,
                     sample_id=row["sample_id"],
                     label=row["label"],
                     signer_id=row["signer_id"],
@@ -62,7 +68,9 @@ def main() -> None:
                 )
 
     report = {
-        "schema_version": SEQUENCE_SCHEMA_VERSION,
+        "schema_version": "training-sequence-v2"
+        if args.include_velocity
+        else SEQUENCE_SCHEMA_VERSION,
         "sequence_length": SEQUENCE_LENGTH,
         "included": included,
         "excluded_label_conflicts": excluded,

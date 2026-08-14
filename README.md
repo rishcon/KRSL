@@ -94,6 +94,7 @@ python scripts/build_training_sequences.py `
 
 Start the first recognizer by running `train_lstm_baseline.bat`. Its metrics and
 best local checkpoint are saved under `reports/experiments/lstm-baseline/`.
+The verified baseline checkpoint is published as `models/lstm-baseline-v1.pt`.
 
 Analyze its held-out P1 errors:
 

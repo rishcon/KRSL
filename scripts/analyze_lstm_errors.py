@@ -32,9 +32,9 @@ class TestDataset(Dataset[tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
 
 
 class LstmClassifier(nn.Module):
-    def __init__(self, class_count: int) -> None:
+    def __init__(self, feature_size: int, class_count: int) -> None:
         super().__init__()
-        self.lstm = nn.LSTM(217, 64, batch_first=True, bidirectional=True)
+        self.lstm = nn.LSTM(feature_size, 64, batch_first=True, bidirectional=True)
         self.classifier = nn.Linear(128, class_count)
 
     def forward(self, features: torch.Tensor, lengths: torch.Tensor) -> torch.Tensor:
@@ -62,7 +62,8 @@ def main() -> None:
             if row["split"] == "test" and row["source_group"] == expected_source_group(row["label"])
         ]
     loader = DataLoader(TestDataset(rows, args.sequence_root, labels), batch_size=64)
-    model = LstmClassifier(len(labels))
+    feature_size = checkpoint["model"]["lstm.weight_ih_l0"].shape[1]
+    model = LstmClassifier(feature_size, len(labels))
     model.load_state_dict(checkpoint["model"])
     model.eval()
     confusion = np.zeros((len(labels), len(labels)), dtype=int)

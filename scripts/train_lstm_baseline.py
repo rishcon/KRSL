@@ -102,7 +102,8 @@ def main() -> None:
         for split, dataset in datasets.items()
     }
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = LstmClassifier(217, len(labels)).to(device)
+    feature_size = datasets["train"][0][0].shape[1]
+    model = LstmClassifier(feature_size, len(labels)).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     loss_fn = nn.CrossEntropyLoss()
     args.report_dir.mkdir(parents=True, exist_ok=True)
@@ -129,6 +130,7 @@ def main() -> None:
     model.load_state_dict(checkpoint["model"])
     report = {
         "device": str(device),
+        "feature_size": feature_size,
         "labels": labels,
         "history": history,
         "test": evaluate(model, loaders["test"], device, len(labels)),

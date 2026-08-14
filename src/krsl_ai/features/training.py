@@ -27,7 +27,9 @@ def normalize_landmarks(values: np.ndarray, pose: np.ndarray) -> np.ndarray:
 
 
 def build_sequence(
-    artifact: dict[str, np.ndarray], sequence_length: int = SEQUENCE_LENGTH
+    artifact: dict[str, np.ndarray],
+    sequence_length: int = SEQUENCE_LENGTH,
+    include_velocity: bool = False,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Build fixed-length features and a validity mask from one cached artifact."""
     pose = artifact["pose"].astype(np.float32)
@@ -46,7 +48,13 @@ def build_sequence(
             artifact["face_present"],
         ]
     ).astype(np.float32)
-    features = np.nan_to_num(np.concatenate([coordinates, presence], axis=1), nan=0.0)
+    coordinates = np.nan_to_num(coordinates, nan=0.0)
+    velocity = np.diff(coordinates, axis=0, prepend=coordinates[:1])
+    features = (
+        np.concatenate([coordinates, velocity, presence], axis=1)
+        if include_velocity
+        else np.concatenate([coordinates, presence], axis=1)
+    )
     source_length = len(features)
     output = np.zeros((sequence_length, features.shape[1]), dtype=np.float32)
     mask = np.zeros(sequence_length, dtype=bool)
