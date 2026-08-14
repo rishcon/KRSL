@@ -94,3 +94,13 @@ python scripts/build_training_sequences.py `
 
 Start the first recognizer by running `train_lstm_baseline.bat`. Its metrics and
 best local checkpoint are saved under `reports/experiments/lstm-baseline/`.
+
+Analyze its held-out P1 errors:
+
+```powershell
+python scripts/analyze_lstm_errors.py `
+  --manifest .\data\manifests\krsl20_v1.csv `
+  --sequence-root .\data\interim\training-sequence-v1 `
+  --checkpoint .\reports\experiments\lstm-baseline\best.pt `
+  --report-dir .\reports\experiments\lstm-baseline
+```
