@@ -84,3 +84,6 @@ python scripts/build_training_sequences.py `
   --output-root .\data\interim\training-sequence-v1 `
   --report .\reports\processing\training-sequence-v1_summary.json
 ```
+
+Start the first recognizer by running `train_lstm_baseline.bat`. Its metrics and
+best local checkpoint are saved under `reports/experiments/lstm-baseline/`.

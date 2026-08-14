@@ -21,6 +21,7 @@ vision = [
     "mediapipe>=1.0",
     "opencv-python>=5.0",
 ]
+training = ["torch>=2.13"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
