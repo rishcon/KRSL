@@ -63,3 +63,6 @@ python scripts/extract_holistic_batch.py `
   --failure-log .\reports\processing\holistic-v1_failures.jsonl `
   --summary .\reports\processing\holistic-v1_summary.json
 ```
+
+For the full local workflow, double-click `run_krsl_pipeline.bat` or run it
+from PowerShell with `./run_krsl_pipeline.bat`.

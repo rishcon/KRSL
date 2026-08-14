@@ -24,6 +24,9 @@
 - Added resumable batch extraction from the manifest. Its one-sample smoke test
   completed with `extracted=1`, `failed=0`; cache, artifacts, and failure logs
   remain local.
+- Added `run_krsl_pipeline.bat`: a local launcher that checks the environment
+  and model, rebuilds the manifest, and runs resumable batch extraction with
+  per-video progress counters.
 
 ## Commands
 

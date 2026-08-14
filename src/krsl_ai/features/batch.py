@@ -41,6 +41,7 @@ def run_batch(
     save: Callable[[HolisticFeatures, Path, Path], None],
     limit: int | None = None,
     overwrite: bool = False,
+    progress_callback: Callable[[BatchSummary], None] | None = None,
 ) -> BatchSummary:
     """Process manifest rows while preserving failures and reusable cache files."""
     output_root.mkdir(parents=True, exist_ok=True)
@@ -58,6 +59,8 @@ def run_batch(
             output_path = output_root / f"{sample_id}.npz"
             if not overwrite and is_valid_cache(output_path):
                 skipped += 1
+                if progress_callback is not None:
+                    progress_callback(BatchSummary(attempted, extracted, skipped, failed))
                 continue
             try:
                 save(extractor(video_path), output_path, video_path)
@@ -72,6 +75,8 @@ def run_batch(
                 with failure_log.open("a", encoding="utf-8") as log_file:
                     log_file.write(json.dumps(failure, ensure_ascii=False) + "\n")
                 failed += 1
+            if progress_callback is not None:
+                progress_callback(BatchSummary(attempted, extracted, skipped, failed))
     return BatchSummary(attempted=attempted, extracted=extracted, skipped=skipped, failed=failed)
 
 
