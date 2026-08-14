@@ -27,6 +27,9 @@
 - Added `run_krsl_pipeline.bat`: a local launcher that checks the environment
   and model, rebuilds the manifest, and runs resumable batch extraction with
   per-video progress counters.
+- Validated all 5,242 `holistic-v1` artifacts: no invalid files; 77,108 total
+  frames; median sequence length 13 frames and maximum 60. Phase 3 will pad
+  sequences to 70 frames rather than truncate them.
 
 ## Commands
 

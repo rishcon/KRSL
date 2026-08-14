@@ -66,3 +66,11 @@ python scripts/extract_holistic_batch.py `
 
 For the full local workflow, double-click `run_krsl_pipeline.bat` or run it
 from PowerShell with `./run_krsl_pipeline.bat`.
+
+Check the extracted data before training:
+
+```powershell
+python scripts/analyze_holistic_quality.py `
+  --artifact-root .\data\processed\holistic-v1 `
+  --report .\reports\processing\holistic-v1_quality.json
+```
