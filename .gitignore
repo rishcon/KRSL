@@ -18,9 +18,7 @@ build/
 .idea/
 
 # Raw and derived datasets: never commit biometric source material or caches.
-data/raw/
-data/interim/
-data/processed/
+
 V2_videos_5signers_isolated_signs/
 V2_keypoints_5signers_isolated_signs/
 
