@@ -38,3 +38,15 @@ python scripts/build_krsl20_manifest.py `
   --report .\reports\dataset_report.json `
   --split-config .\splits\krsl20_signer_independent_v1.json
 ```
+
+## Phase 2 single-video extraction
+
+Download the MediaPipe Holistic model to `models/holistic_landmarker.task`, then
+run:
+
+```powershell
+python scripts/extract_holistic_video.py `
+  --video .\path\to\sample.mov `
+  --model .\models\holistic_landmarker.task `
+  --output .\artifacts\smoke\one_video.npz
+```

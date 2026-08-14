@@ -18,6 +18,9 @@
   `splits/krsl20_signer_independent_v1.json` from the immutable local data.
 - Verified the Phase 1 split: P3–P5 train, P2 validation, P1 test; every split
   contains all 20 labels and no signer crosses a split boundary.
+- Completed the Phase 2 single-video smoke test with MediaPipe 1.0.0 on
+  `P1_gde (1).mov`: saved a `holistic-v1` artifact with 4 decoded frames,
+  hands, pose, face, timestamps, and presence masks.
 
 ## Commands
 
