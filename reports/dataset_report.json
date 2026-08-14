@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "sample_count": 5242,
+  "keypoint_file_count": 77075,
+  "class_counts": {
+    "gde": 260,
+    "gdeQ": 260,
+    "kak": 254,
+    "kakQ": 258,
+    "kakoi": 262,
+    "kakoiQ": 260,
+    "kogda": 260,
+    "kogdaQ": 262,
+    "kotoriy": 320,
+    "kotoriyQ": 278,
+    "kto": 257,
+    "ktoQ": 218,
+    "kuda": 260,
+    "kudaQ": 259,
+    "skolko": 259,
+    "skolkoQ": 260,
+    "what": 260,
+    "whatQ": 260,
+    "zachem": 300,
+    "zachemQ": 235
+  },
+  "signer_counts": {
+    "P1": 1134,
+    "P2": 1295,
+    "P3": 1223,
+    "P4": 789,
+    "P5": 801
+  },
+  "split_counts": {
+    "test": 1134,
+    "train": 2813,
+    "validation": 1295
+  },
+  "source_group_counts": {
+    "_gde": 260,
+    "_gde_q": 260,
+    "_kak": 254,
+    "_kak_q": 258,
+    "_kakoi": 262,
+    "_kakoi_q": 260,
+    "_kogda": 260,
+    "_kogda_q": 262,
+    "_kotoriy": 320,
+    "_kotoriy_q": 238,
+    "_kto": 257,
+    "_kto_q": 258,
+    "_kuda": 260,
+    "_kuda_q": 259,
+    "_skolko": 259,
+    "_skolko_q": 260,
+    "_what": 260,
+    "_what_q": 260,
+    "_zachem": 260,
+    "_zachem_q": 275
+  },
+  "labels_by_source_group": {
+    "_gde": {
+      "gde": 260
+    },
+    "_gde_q": {
+      "gdeQ": 260
+    },
+    "_kak": {
+      "kak": 254
+    },
+    "_kak_q": {
+      "kakQ": 258
+    },
+    "_kakoi": {
+      "kakoi": 262
+    },
+    "_kakoi_q": {
+      "kakoiQ": 260
+    },
+    "_kogda": {
+      "kogda": 260
+    },
+    "_kogda_q": {
+      "kogdaQ": 262
+    },
+    "_kotoriy": {
+      "kotoriy": 320
+    },
+    "_kotoriy_q": {
+      "kotoriyQ": 238
+    },
+    "_kto": {
+      "kto": 257
+    },
+    "_kto_q": {
+      "kotoriyQ": 40,
+      "ktoQ": 218
+    },
+    "_kuda": {
+      "kuda": 260
+    },
+    "_kuda_q": {
+      "kudaQ": 259
+    },
+    "_skolko": {
+      "skolko": 259
+    },
+    "_skolko_q": {
+      "skolkoQ": 260
+    },
+    "_what": {
+      "what": 260
+    },
+    "_what_q": {
+      "whatQ": 260
+    },
+    "_zachem": {
+      "zachem": 260
+    },
+    "_zachem_q": {
+      "zachem": 40,
+      "zachemQ": 235
+    }
+  },
+  "logical_sample_collisions": [
+    "P4_kotoriyQ_0001",
+    "P4_kotoriyQ_0002",
+    "P4_kotoriyQ_0003",
+    "P4_kotoriyQ_0004",
+    "P4_kotoriyQ_0005",
+    "P4_kotoriyQ_0006",
+    "P4_kotoriyQ_0007",
+    "P4_kotoriyQ_0008",
+    "P4_kotoriyQ_0009",
+    "P4_kotoriyQ_0010",
+    "P4_kotoriyQ_0011",
+    "P4_kotoriyQ_0012",
+    "P4_kotoriyQ_0013",
+    "P4_kotoriyQ_0014",
+    "P4_kotoriyQ_0015",
+    "P4_kotoriyQ_0016",
+    "P4_kotoriyQ_0017",
+    "P4_kotoriyQ_0018",
+    "P4_kotoriyQ_0019",
+    "P4_kotoriyQ_0020",
+    "P4_kotoriyQ_0021",
+    "P4_kotoriyQ_0022",
+    "P4_kotoriyQ_0023",
+    "P4_kotoriyQ_0024",
+    "P4_kotoriyQ_0025",
+    "P4_kotoriyQ_0026",
+    "P4_kotoriyQ_0027",
+    "P4_kotoriyQ_0028",
+    "P4_kotoriyQ_0029",
+    "P4_kotoriyQ_0030",
+    "P4_kotoriyQ_0031",
+    "P4_kotoriyQ_0032",
+    "P4_kotoriyQ_0033",
+    "P4_kotoriyQ_0034",
+    "P4_kotoriyQ_0035",
+    "P4_kotoriyQ_0036",
+    "P4_kotoriyQ_0037",
+    "P4_kotoriyQ_0038",
+    "P4_kotoriyQ_0039",
+    "P4_kotoriyQ_0040",
+    "P5_zachem_0001",
+    "P5_zachem_0002",
+    "P5_zachem_0003",
+    "P5_zachem_0004",
+    "P5_zachem_0005",
+    "P5_zachem_0006",
+    "P5_zachem_0007",
+    "P5_zachem_0008",
+    "P5_zachem_0009",
+    "P5_zachem_0010",
+    "P5_zachem_0011",
+    "P5_zachem_0012",
+    "P5_zachem_0013",
+    "P5_zachem_0014",
+    "P5_zachem_0015",
+    "P5_zachem_0016",
+    "P5_zachem_0017",
+    "P5_zachem_0018",
+    "P5_zachem_0019",
+    "P5_zachem_0020",
+    "P5_zachem_0021",
+    "P5_zachem_0022",
+    "P5_zachem_0023",
+    "P5_zachem_0024",
+    "P5_zachem_0025",
+    "P5_zachem_0026",
+    "P5_zachem_0027",
+    "P5_zachem_0028",
+    "P5_zachem_0029",
+    "P5_zachem_0030",
+    "P5_zachem_0031",
+    "P5_zachem_0032",
+    "P5_zachem_0033",
+    "P5_zachem_0034",
+    "P5_zachem_0035",
+    "P5_zachem_0036",
+    "P5_zachem_0037",
+    "P5_zachem_0038",
+    "P5_zachem_0039",
+    "P5_zachem_0040"
+  ],
+  "unmatched_video_count": 0,
+  "unmatched_videos": []
+}
