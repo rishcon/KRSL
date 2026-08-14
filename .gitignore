@@ -26,6 +26,7 @@ V2_keypoints_5signers_isolated_signs/
 
 # Experiment outputs and model artifacts
 reports/experiments/
+reports/processing/
 artifacts/
 checkpoints/
 models/

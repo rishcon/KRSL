@@ -50,3 +50,16 @@ python scripts/extract_holistic_video.py `
   --model .\models\holistic_landmarker.task `
   --output .\artifacts\smoke\one_video.npz
 ```
+
+Batch extraction uses the committed manifest and keeps its cache and failure log
+local:
+
+```powershell
+python scripts/extract_holistic_batch.py `
+  --manifest .\data\manifests\krsl20_v1.csv `
+  --video-root .\V2_videos_5signers_isolated_signs\V2_videos_5signers_isolated_signs `
+  --model .\models\holistic_landmarker.task `
+  --output-root .\data\processed\holistic-v1 `
+  --failure-log .\reports\processing\holistic-v1_failures.jsonl `
+  --summary .\reports\processing\holistic-v1_summary.json
+```

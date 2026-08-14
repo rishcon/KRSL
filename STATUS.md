@@ -21,6 +21,9 @@
 - Completed the Phase 2 single-video smoke test with MediaPipe 1.0.0 on
   `P1_gde (1).mov`: saved a `holistic-v1` artifact with 4 decoded frames,
   hands, pose, face, timestamps, and presence masks.
+- Added resumable batch extraction from the manifest. Its one-sample smoke test
+  completed with `extracted=1`, `failed=0`; cache, artifacts, and failure logs
+  remain local.
 
 ## Commands
 
