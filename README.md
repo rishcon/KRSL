@@ -51,6 +51,13 @@ python scripts/extract_holistic_video.py `
   --output .\artifacts\smoke\one_video.npz
 ```
 
+For the full local pipeline, including landmark extraction and LSTM training:
+
+```powershell
+python -m pip install -r requirements.txt
+python -m pip install -e .
+```
+
 Batch extraction uses the committed manifest and keeps its cache and failure log
 local:
 

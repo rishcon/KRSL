@@ -1,0 +1,11 @@
+# Landmark extraction and array processing
+numpy==2.5.2
+mediapipe==1.0.0
+opencv-python==5.0.0.93
+
+# Model training
+torch==2.13.0
+
+# Development checks
+pytest==9.1.1
+ruff==0.16.3
