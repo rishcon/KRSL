@@ -2,7 +2,7 @@
 
 ## Active phase
 
-**Phase 1 — KRSL20 inventory and signer-independent splits**
+**Phase 2 — video to landmarks preprocessing**
 
 ## Completed
 
@@ -14,6 +14,10 @@
   `reference/legacy-notes.md`.
 - Passed Phase 0 checks on Python 3.12.4: `ruff format --check .`,
   `ruff check .`, and `pytest` (1 passed).
+- Created `data/manifests/krsl20_v1.csv`, `reports/dataset_report.json`, and
+  `splits/krsl20_signer_independent_v1.json` from the immutable local data.
+- Verified the Phase 1 split: P3–P5 train, P2 validation, P1 test; every split
+  contains all 20 labels and no signer crosses a split boundary.
 
 ## Commands
 
@@ -26,10 +30,10 @@ ruff format --check .
 
 ## Next phase gate
 
-- Inventory the local KRSL20 video/keypoint directories without modifying raw
-  material.
-- Determine signer identifiers and create reproducible signer-independent
-  train/validation/test split manifests.
+- Implement a versioned extractor for one video and save a feature artifact
+  with its source sample ID.
+- Preserve missing landmark information with explicit masks and produce an
+  overlay for visual inspection.
 
 ## Known constraints
 
@@ -37,3 +41,10 @@ ruff format --check .
   `V2_videos_5signers_isolated_signs/` and
   `V2_keypoints_5signers_isolated_signs/`; it must not be uploaded to Git.
 - KRSL20 data-use rights must be confirmed before any commercial release.
+- The raw folders contain 80 duplicate logical IDs: 40 `P4_kotoriyQ` samples
+  appear under both `_kotoriy_q` and `_kto_q`, and 40 `P5_zachem` samples
+  appear under both `_zachem` and `_zachem_q`. The manifest preserves both
+  paths and reports them; no raw file has been renamed, moved, or deleted.
+- The 80 colliding files have distinct SHA-256 hashes, so they are not
+  byte-identical copies. Their intended labels require annotation review before
+  they are used for a quality claim or final training set.

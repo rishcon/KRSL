@@ -7,9 +7,9 @@ translation.
 
 ## Current status
 
-Phase 1 is in progress: KRSL20 inventory and signer-independent split design.
-The project foundation and legacy audit are complete; no model or dataset
-preprocessing code is included yet.
+Phase 2 is in progress: versioned video-to-landmark preprocessing. The project
+foundation, legacy audit, and signer-independent data inventory are complete;
+no model training code is included yet.
 
 ## Local setup
 
@@ -27,3 +27,14 @@ ruff format --check .
 
 Raw videos and extracted keypoints are intentionally excluded from Git. See
 `STATUS.md` for the active phase and runnable commands.
+
+## Phase 1 inventory
+
+```powershell
+python scripts/build_krsl20_manifest.py `
+  --video-root .\V2_videos_5signers_isolated_signs\V2_videos_5signers_isolated_signs `
+  --keypoint-root .\V2_keypoints_5signers_isolated_signs\V2_keypoints_5signers_isolated_signs `
+  --manifest .\data\manifests\krsl20_v1.csv `
+  --report .\reports\dataset_report.json `
+  --split-config .\splits\krsl20_signer_independent_v1.json
+```
