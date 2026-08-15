@@ -99,6 +99,10 @@ The verified baseline checkpoint is published as `models/lstm-baseline-v1.pt`.
 Run `train_transformer.bat` to compare a compact Transformer against the
 velocity BiLSTM on the same signer-independent splits.
 
+Run `train_lstm_balanced_augmented.bat` to train the next BiLSTM experiment.
+It balances class contributions and applies mild landmark noise and temporal
+speed changes only to training samples; validation and test data stay intact.
+
 Recognize one isolated sign in an existing video by double-clicking
 `recognize_video.bat` and entering the video path. You can also drag a video
 file onto the batch file. The recognizer uses `models/lstm-velocity-v1.pt` and

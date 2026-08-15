@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import random
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -15,11 +16,19 @@ from torch.utils.data import DataLoader, Dataset
 
 from krsl_ai.features.training import expected_source_group
 from krsl_ai.models.lstm import LstmClassifier
+from krsl_ai.training.augmentation import augment_sequence
+from krsl_ai.training.balancing import inverse_frequency_weights
 
 
 class SequenceDataset(Dataset[tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
-    def __init__(self, rows: list[dict[str, str]], root: Path, labels: dict[str, int]) -> None:
-        self.rows, self.root, self.labels = rows, root, labels
+    def __init__(
+        self,
+        rows: list[dict[str, str]],
+        root: Path,
+        labels: dict[str, int],
+        augment: bool = False,
+    ) -> None:
+        self.rows, self.root, self.labels, self.augment = rows, root, labels, augment
 
     def __len__(self) -> int:
         return len(self.rows)
@@ -28,7 +37,10 @@ class SequenceDataset(Dataset[tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
         row = self.rows[index]
         with np.load(self.root / f"{row['sample_id']}.npz") as item:
             features = torch.from_numpy(item["features"].astype(np.float32))
-            length = torch.tensor(int(item["sequence_mask"].sum()), dtype=torch.long)
+            length_value = int(item["sequence_mask"].sum())
+        if self.augment:
+            features, length_value = augment_sequence(features, length_value)
+        length = torch.tensor(length_value, dtype=torch.long)
         return features, length, torch.tensor(self.labels[row["label"]], dtype=torch.long)
 
 
@@ -63,6 +75,17 @@ def evaluate(
     return {"accuracy": correct / total, "macro_f1": float(np.mean(f1))}
 
 
+def current_git_sha() -> str:
+    """Return the code revision recorded with an experiment."""
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip() if result.returncode == 0 else "unknown"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True)
@@ -71,15 +94,24 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--balanced-loss", action="store_true")
+    parser.add_argument("--augment", action="store_true")
     args = parser.parse_args()
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     rows = read_rows(args.manifest)
     labels = {label: index for index, label in enumerate(sorted({row["label"] for row in rows}))}
+    split_rows = {
+        split: [row for row in rows if row["split"] == split]
+        for split in ("train", "validation", "test")
+    }
     datasets = {
         split: SequenceDataset(
-            [row for row in rows if row["split"] == split], args.sequence_root, labels
+            split_rows[split],
+            args.sequence_root,
+            labels,
+            augment=args.augment and split == "train",
         )
         for split in ("train", "validation", "test")
     }
@@ -91,8 +123,22 @@ def main() -> None:
     feature_size = datasets["train"][0][0].shape[1]
     model = LstmClassifier(feature_size, len(labels)).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    loss_fn = nn.CrossEntropyLoss()
+    targets = [labels[row["label"]] for row in split_rows["train"]]
+    class_weights = (
+        inverse_frequency_weights(targets, len(labels)).to(device) if args.balanced_loss else None
+    )
+    loss_fn = nn.CrossEntropyLoss(weight=class_weights)
     args.report_dir.mkdir(parents=True, exist_ok=True)
+    experiment_config = {
+        "model_type": "velocity-bilstm-v2" if args.augment else "bilstm-v1",
+        "manifest": str(args.manifest),
+        "sequence_root": str(args.sequence_root),
+        "epochs": args.epochs,
+        "batch_size": args.batch_size,
+        "seed": args.seed,
+        "balanced_loss": args.balanced_loss,
+        "augmentation": args.augment,
+    }
     best_f1 = -1.0
     history = []
     for epoch in range(1, args.epochs + 1):
@@ -111,13 +157,28 @@ def main() -> None:
         )
         if validation["macro_f1"] > best_f1:
             best_f1 = validation["macro_f1"]
-            torch.save({"model": model.state_dict(), "labels": labels}, args.report_dir / "best.pt")
+            torch.save(
+                {
+                    "model": model.state_dict(),
+                    "labels": labels,
+                    "feature_size": feature_size,
+                    "config": experiment_config,
+                    "git_sha": current_git_sha(),
+                },
+                args.report_dir / "best.pt",
+            )
     checkpoint = torch.load(args.report_dir / "best.pt", map_location=device, weights_only=True)
     model.load_state_dict(checkpoint["model"])
     report = {
         "device": str(device),
         "feature_size": feature_size,
         "labels": labels,
+        "git_sha": current_git_sha(),
+        "config": experiment_config,
+        "train_class_counts": {
+            label: sum(row["label"] == label for row in split_rows["train"]) for label in labels
+        },
+        "class_weights": class_weights.cpu().tolist() if class_weights is not None else None,
         "history": history,
         "test": evaluate(model, loaders["test"], device, len(labels)),
     }

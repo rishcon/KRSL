@@ -2,7 +2,7 @@
 
 ## Active phase
 
-**Phase 4 — isolated-video inference**
+**Phase 4 — isolated-video inference and model improvement**
 
 ## Completed
 
@@ -47,6 +47,10 @@
 - Passed the inference smoke test on `P1_gde (1).mov`: the complete pipeline
   ran successfully and returned `gdeQ` at 79.74% confidence. The source label
   is `gde`, so this sample also documents a genuine model classification error.
+- Added the balanced and augmented velocity BiLSTM experiment. Its one-epoch
+  smoke test completed with a valid checkpoint, recorded config and class
+  weights, 24.69% test accuracy, and 19.88% macro-F1. The full launcher is
+  `train_lstm_balanced_augmented.bat`.
 
 ## Commands
 
@@ -59,9 +63,10 @@ ruff format --check .
 
 ## Next phase gate
 
-- Test isolated-video inference on newly recorded clips from a signer who is
-  absent from the training set and record both accepted and `UNKNOWN` cases.
-- Add a landmark overlay for visual inspection before starting webcam mode.
+- Train the balanced and augmented experiment for 30 epochs, compare it on P1,
+  recalibrate `UNKNOWN`, and publish it only if it beats the primary model.
+- Then test newly recorded clips from an unseen signer and add a landmark
+  overlay before starting webcam mode.
 
 ## Known constraints
 
@@ -78,3 +83,6 @@ ruff format --check .
   they are used for a quality claim or final training set.
 - The current primary model has 41.71% held-out accuracy and can be confidently
   wrong; the 60% threshold reduces forced guesses but is not a safety guarantee.
+- Manual video checks confirmed recurring confusions including `gde` versus
+  `skolko` and `kak` versus `gde`, `what`, and `kuda`. The saved P1 confusion
+  matrix independently shows 29 `gde`→`skolko` and 23 `kak`→`gde` errors.
