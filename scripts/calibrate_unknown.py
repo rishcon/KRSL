@@ -8,7 +8,9 @@ from pathlib import Path
 
 import torch
 from torch.utils.data import DataLoader
-from train_lstm_baseline import LstmClassifier, SequenceDataset, read_rows
+from train_lstm_baseline import SequenceDataset, read_rows
+
+from krsl_ai.models.lstm import LstmClassifier
 
 
 def predictions(model: LstmClassifier, loader: DataLoader) -> tuple[torch.Tensor, torch.Tensor]:

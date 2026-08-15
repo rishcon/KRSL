@@ -11,10 +11,10 @@ from pathlib import Path
 import numpy as np
 import torch
 from torch import nn
-from torch.nn.utils.rnn import pack_padded_sequence
 from torch.utils.data import DataLoader, Dataset
 
 from krsl_ai.features.training import expected_source_group
+from krsl_ai.models.lstm import LstmClassifier
 
 
 class SequenceDataset(Dataset[tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
@@ -30,20 +30,6 @@ class SequenceDataset(Dataset[tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
             features = torch.from_numpy(item["features"].astype(np.float32))
             length = torch.tensor(int(item["sequence_mask"].sum()), dtype=torch.long)
         return features, length, torch.tensor(self.labels[row["label"]], dtype=torch.long)
-
-
-class LstmClassifier(nn.Module):
-    def __init__(self, feature_size: int, class_count: int) -> None:
-        super().__init__()
-        self.lstm = nn.LSTM(feature_size, 64, batch_first=True, bidirectional=True)
-        self.classifier = nn.Linear(128, class_count)
-
-    def forward(self, features: torch.Tensor, lengths: torch.Tensor) -> torch.Tensor:
-        packed = pack_padded_sequence(
-            features, lengths.cpu(), batch_first=True, enforce_sorted=False
-        )
-        _, (hidden, _) = self.lstm(packed)
-        return self.classifier(torch.cat([hidden[-2], hidden[-1]], dim=1))
 
 
 def read_rows(manifest: Path) -> list[dict[str, str]]:

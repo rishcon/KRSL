@@ -2,7 +2,7 @@
 
 ## Active phase
 
-**Phase 2 — video to landmarks preprocessing**
+**Phase 4 — isolated-video inference**
 
 ## Completed
 
@@ -39,6 +39,14 @@
   is `train_lstm_baseline.bat`.
 - Added a compact masked Transformer experiment for direct comparison on the
   same `training-sequence-v2` data and signer-independent splits.
+- The Transformer reached 38.18% held-out accuracy and 30.84% macro-F1, so the
+  velocity BiLSTM remains the primary checkpoint at 41.71% and 38.56%.
+- Added single-video inference with the same velocity feature pipeline, the
+  published BiLSTM checkpoint, top-3 candidates, and calibrated `UNKNOWN` at
+  confidence below 60%. The launcher is `recognize_video.bat`.
+- Passed the inference smoke test on `P1_gde (1).mov`: the complete pipeline
+  ran successfully and returned `gdeQ` at 79.74% confidence. The source label
+  is `gde`, so this sample also documents a genuine model classification error.
 
 ## Commands
 
@@ -51,10 +59,9 @@ ruff format --check .
 
 ## Next phase gate
 
-- Implement a versioned extractor for one video and save a feature artifact
-  with its source sample ID.
-- Preserve missing landmark information with explicit masks and produce an
-  overlay for visual inspection.
+- Test isolated-video inference on newly recorded clips from a signer who is
+  absent from the training set and record both accepted and `UNKNOWN` cases.
+- Add a landmark overlay for visual inspection before starting webcam mode.
 
 ## Known constraints
 
@@ -69,3 +76,5 @@ ruff format --check .
 - The 80 colliding files have distinct SHA-256 hashes, so they are not
   byte-identical copies. Their intended labels require annotation review before
   they are used for a quality claim or final training set.
+- The current primary model has 41.71% held-out accuracy and can be confidently
+  wrong; the 60% threshold reduces forced guesses but is not a safety guarantee.

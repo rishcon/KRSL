@@ -7,9 +7,9 @@ translation.
 
 ## Current status
 
-Phase 2 is in progress: versioned video-to-landmark preprocessing. The project
-foundation, legacy audit, and signer-independent data inventory are complete;
-no model training code is included yet.
+Isolated-video inference is in progress. The repository includes versioned
+video preprocessing, signer-independent training, published BiLSTM
+checkpoints, confidence calibration, and a launcher for recognizing one video.
 
 ## Local setup
 
@@ -98,6 +98,11 @@ The verified baseline checkpoint is published as `models/lstm-baseline-v1.pt`.
 
 Run `train_transformer.bat` to compare a compact Transformer against the
 velocity BiLSTM on the same signer-independent splits.
+
+Recognize one isolated sign in an existing video by double-clicking
+`recognize_video.bat` and entering the video path. You can also drag a video
+file onto the batch file. The recognizer uses `models/lstm-velocity-v1.pt` and
+returns `UNKNOWN` when its confidence is below the calibrated 60% threshold.
 
 Analyze its held-out P1 errors:
 
