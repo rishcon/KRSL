@@ -55,6 +55,13 @@
   17, but held-out P1 accuracy was 37.48% and macro-F1 was 31.36%, below the
   primary velocity BiLSTM. The experiment is retained locally and rejected as
   a replacement checkpoint.
+- Added `training-sequence-v3`: hand shape is normalized around each wrist,
+  global wrist position is retained, face points target brows/eyes/mouth, and
+  velocity is zero across missing-landmark transitions. The one-step build and
+  training launcher is `run_lstm_handcentric_v3.bat`.
+- Built all 5,162 valid local v3 sequences with 80 known label conflicts
+  excluded and zero failures. A one-epoch smoke run reached 41.89% P1 accuracy
+  and 34.34% macro-F1; this is promising but is not a final comparison.
 
 ## Commands
 
@@ -67,9 +74,9 @@ ruff format --check .
 
 ## Next phase gate
 
-- Build a new feature schema that avoids artificial velocity spikes when a
-  hand disappears and better preserves hand shape, then benchmark it on P1.
-- Publish and recalibrate a checkpoint only if it beats the primary model;
+- Train the hand-centric v3 experiment for 30 epochs and analyze its focused
+  confusion matrix on `gde`, `skolko`, `kak`, `what`, `kuda`, and `kto`.
+- Publish and recalibrate the checkpoint only if it beats the primary model;
   then test newly recorded clips and add a landmark overlay.
 
 ## Known constraints

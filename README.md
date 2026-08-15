@@ -103,6 +103,11 @@ Run `train_lstm_balanced_augmented.bat` to train the next BiLSTM experiment.
 It balances class contributions and applies mild landmark noise and temporal
 speed changes only to training samples; validation and test data stay intact.
 
+Run `run_lstm_handcentric_v3.bat` to build `training-sequence-v3` and train its
+BiLSTM in one step. V3 normalizes each hand around its wrist, preserves global
+wrist position, uses semantic face points, and suppresses velocity across
+frames where a landmark group is missing.
+
 Recognize one isolated sign in an existing video by double-clicking
 `recognize_video.bat` and entering the video path. You can also drag a video
 file onto the batch file. The recognizer uses `models/lstm-velocity-v1.pt` and

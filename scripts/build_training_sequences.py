@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from krsl_ai.features.training import (
+    HAND_CENTRIC_SCHEMA_VERSION,
     SEQUENCE_LENGTH,
     SEQUENCE_SCHEMA_VERSION,
     build_sequence,
@@ -25,7 +26,10 @@ def main() -> None:
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--include-velocity", action="store_true")
+    parser.add_argument("--hand-centric", action="store_true")
     args = parser.parse_args()
+    if args.hand_centric and args.include_velocity:
+        parser.error("--hand-centric already includes velocity; do not combine both flags.")
     args.output_root.mkdir(parents=True, exist_ok=True)
     included = excluded = failed = 0
 
@@ -43,12 +47,18 @@ def main() -> None:
                     features, mask = build_sequence(
                         {key: artifact[key] for key in artifact.files},
                         include_velocity=args.include_velocity,
+                        hand_centric=args.hand_centric,
                     )
+                schema_version = (
+                    HAND_CENTRIC_SCHEMA_VERSION
+                    if args.hand_centric
+                    else "training-sequence-v2"
+                    if args.include_velocity
+                    else SEQUENCE_SCHEMA_VERSION
+                )
                 np.savez_compressed(
                     output_path,
-                    schema_version="training-sequence-v2"
-                    if args.include_velocity
-                    else SEQUENCE_SCHEMA_VERSION,
+                    schema_version=schema_version,
                     sample_id=row["sample_id"],
                     label=row["label"],
                     signer_id=row["signer_id"],
@@ -68,7 +78,9 @@ def main() -> None:
                 )
 
     report = {
-        "schema_version": "training-sequence-v2"
+        "schema_version": HAND_CENTRIC_SCHEMA_VERSION
+        if args.hand_centric
+        else "training-sequence-v2"
         if args.include_velocity
         else SEQUENCE_SCHEMA_VERSION,
         "sequence_length": SEQUENCE_LENGTH,

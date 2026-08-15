@@ -96,6 +96,7 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--balanced-loss", action="store_true")
     parser.add_argument("--augment", action="store_true")
+    parser.add_argument("--model-type")
     args = parser.parse_args()
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -130,7 +131,7 @@ def main() -> None:
     loss_fn = nn.CrossEntropyLoss(weight=class_weights)
     args.report_dir.mkdir(parents=True, exist_ok=True)
     experiment_config = {
-        "model_type": "velocity-bilstm-v2" if args.augment else "bilstm-v1",
+        "model_type": args.model_type or ("velocity-bilstm-v2" if args.augment else "bilstm-v1"),
         "manifest": str(args.manifest),
         "sequence_root": str(args.sequence_root),
         "epochs": args.epochs,
