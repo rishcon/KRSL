@@ -62,6 +62,15 @@
 - Built all 5,162 valid local v3 sequences with 80 known label conflicts
   excluded and zero failures. A one-epoch smoke run reached 41.89% P1 accuracy
   and 34.34% macro-F1; this is promising but is not a final comparison.
+- Completed the 30-epoch v3 run. Its best validation checkpoint was epoch 28;
+  P1 accuracy is 46.91% and macro-F1 is 41.27%, beating the former primary
+  model by 5.20 and 2.71 percentage points respectively.
+- Calibrated v3 `UNKNOWN` at 59% on P2. On P1 it accepts 74.34% of samples and
+  reaches 53.38% accuracy among accepted predictions. The published checkpoint
+  stores both its feature policy and confidence threshold.
+- The published-checkpoint inference smoke test loaded v3 automatically and
+  processed `P1_gde (1).mov`, but predicted `zachem` at 76.76%. This remains a
+  documented confident error despite the aggregate improvement.
 
 ## Commands
 
@@ -74,10 +83,9 @@ ruff format --check .
 
 ## Next phase gate
 
-- Train the hand-centric v3 experiment for 30 epochs and analyze its focused
-  confusion matrix on `gde`, `skolko`, `kak`, `what`, `kuda`, and `kto`.
-- Publish and recalibrate the checkpoint only if it beats the primary model;
-  then test newly recorded clips and add a landmark overlay.
+- Test the published v3 checkpoint on newly recorded clips, especially `kak`,
+  `what`, and their question variants, and record accepted/`UNKNOWN` outcomes.
+- Add a landmark overlay for visual inspection before starting webcam mode.
 
 ## Known constraints
 
@@ -92,8 +100,8 @@ ruff format --check .
 - The 80 colliding files have distinct SHA-256 hashes, so they are not
   byte-identical copies. Their intended labels require annotation review before
   they are used for a quality claim or final training set.
-- The current primary model has 41.71% held-out accuracy and can be confidently
-  wrong; the 60% threshold reduces forced guesses but is not a safety guarantee.
+- The current primary model has 46.91% held-out accuracy and can be confidently
+  wrong; the 59% threshold reduces forced guesses but is not a safety guarantee.
 - Manual video checks confirmed recurring confusions including `gde` versus
   `skolko` and `kak` versus `gde`, `what`, and `kuda`. The saved P1 confusion
   matrix independently shows 29 `gde`→`skolko` and 23 `kak`→`gde` errors.

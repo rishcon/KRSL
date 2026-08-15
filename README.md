@@ -110,8 +110,9 @@ frames where a landmark group is missing.
 
 Recognize one isolated sign in an existing video by double-clicking
 `recognize_video.bat` and entering the video path. You can also drag a video
-file onto the batch file. The recognizer uses `models/lstm-velocity-v1.pt` and
-returns `UNKNOWN` when its confidence is below the calibrated 60% threshold.
+file onto the batch file. The recognizer uses the current primary checkpoint,
+`models/lstm-handcentric-v3.pt`, and returns `UNKNOWN` below its calibrated 59%
+confidence threshold.
 
 Analyze its held-out P1 errors:
 

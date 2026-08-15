@@ -20,9 +20,9 @@ def main() -> None:
     parser.add_argument(
         "--checkpoint",
         type=Path,
-        default=Path("models/lstm-velocity-v1.pt"),
+        default=Path("models/lstm-handcentric-v3.pt"),
     )
-    parser.add_argument("--threshold", type=float, default=0.6)
+    parser.add_argument("--threshold", type=float)
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--json", action="store_true", dest="as_json")
     args = parser.parse_args()

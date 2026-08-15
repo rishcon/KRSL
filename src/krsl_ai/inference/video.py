@@ -38,7 +38,17 @@ class VideoPrediction:
         return asdict(self)
 
 
-def load_lstm_checkpoint(checkpoint_path: Path) -> tuple[LstmClassifier, dict[str, int]]:
+@dataclass(frozen=True)
+class LoadedLstmCheckpoint:
+    """Runtime model and preprocessing policy stored in one checkpoint."""
+
+    model: LstmClassifier
+    labels: dict[str, int]
+    model_type: str
+    unknown_threshold: float
+
+
+def load_lstm_checkpoint(checkpoint_path: Path) -> LoadedLstmCheckpoint:
     """Load a published BiLSTM checkpoint on CPU."""
     if not checkpoint_path.is_file():
         raise FileNotFoundError(f"Model checkpoint not found: {checkpoint_path}")
@@ -48,7 +58,13 @@ def load_lstm_checkpoint(checkpoint_path: Path) -> tuple[LstmClassifier, dict[st
     model = LstmClassifier(feature_size, len(labels))
     model.load_state_dict(checkpoint["model"])
     model.eval()
-    return model, labels
+    config = checkpoint.get("config", {})
+    return LoadedLstmCheckpoint(
+        model=model,
+        labels=labels,
+        model_type=str(config.get("model_type", "velocity-bilstm-v1")),
+        unknown_threshold=float(checkpoint.get("unknown_threshold", 0.6)),
+    )
 
 
 def predict_sequence(
@@ -94,13 +110,26 @@ def recognize_video(
     video_path: Path,
     holistic_model_path: Path,
     checkpoint_path: Path,
-    threshold: float = 0.6,
+    threshold: float | None = None,
     top_k: int = 3,
 ) -> VideoPrediction:
-    """Extract velocity features from one video and recognize its isolated sign."""
+    """Extract checkpoint-compatible features and recognize one isolated sign."""
     if not video_path.is_file():
         raise FileNotFoundError(f"Video not found: {video_path}")
+    checkpoint = load_lstm_checkpoint(checkpoint_path)
     artifact = extract_video(video_path, holistic_model_path)
-    features, mask = build_sequence(artifact.__dict__, include_velocity=True)
-    model, labels = load_lstm_checkpoint(checkpoint_path)
-    return predict_sequence(model, features, mask, labels, threshold, top_k)
+    hand_centric = checkpoint.model_type == "hand-centric-bilstm-v3"
+    features, mask = build_sequence(
+        artifact.__dict__,
+        include_velocity=not hand_centric,
+        hand_centric=hand_centric,
+    )
+    selected_threshold = checkpoint.unknown_threshold if threshold is None else threshold
+    return predict_sequence(
+        checkpoint.model,
+        features,
+        mask,
+        checkpoint.labels,
+        selected_threshold,
+        top_k,
+    )

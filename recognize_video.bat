@@ -4,7 +4,7 @@ cd /d "%~dp0"
 
 if not exist ".venv\Scripts\python.exe" goto :missing_python
 if not exist "models\holistic_landmarker.task" goto :missing_holistic
-if not exist "models\lstm-velocity-v1.pt" goto :missing_checkpoint
+if not exist "models\lstm-handcentric-v3.pt" goto :missing_checkpoint
 
 set "VIDEO_PATH=%~1"
 if defined VIDEO_PATH goto :video_ready
@@ -32,7 +32,7 @@ echo ERROR: models\holistic_landmarker.task was not found.
 goto :failed
 
 :missing_checkpoint
-echo ERROR: models\lstm-velocity-v1.pt was not found.
+echo ERROR: models\lstm-handcentric-v3.pt was not found.
 goto :failed
 
 :missing_video
