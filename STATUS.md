@@ -51,6 +51,10 @@
   smoke test completed with a valid checkpoint, recorded config and class
   weights, 24.69% test accuracy, and 19.88% macro-F1. The full launcher is
   `train_lstm_balanced_augmented.bat`.
+- Completed its 30-epoch run. The best validation macro-F1 was 42.54% at epoch
+  17, but held-out P1 accuracy was 37.48% and macro-F1 was 31.36%, below the
+  primary velocity BiLSTM. The experiment is retained locally and rejected as
+  a replacement checkpoint.
 
 ## Commands
 
@@ -63,10 +67,10 @@ ruff format --check .
 
 ## Next phase gate
 
-- Train the balanced and augmented experiment for 30 epochs, compare it on P1,
-  recalibrate `UNKNOWN`, and publish it only if it beats the primary model.
-- Then test newly recorded clips from an unseen signer and add a landmark
-  overlay before starting webcam mode.
+- Build a new feature schema that avoids artificial velocity spikes when a
+  hand disappears and better preserves hand shape, then benchmark it on P1.
+- Publish and recalibrate a checkpoint only if it beats the primary model;
+  then test newly recorded clips and add a landmark overlay.
 
 ## Known constraints
 
