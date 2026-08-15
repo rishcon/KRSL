@@ -71,6 +71,10 @@
 - The published-checkpoint inference smoke test loaded v3 automatically and
   processed `P1_gde (1).mov`, but predicted `zachem` at 76.76%. This remains a
   documented confident error despite the aggregate improvement.
+- Added a tkinter desktop test application with video selection, background
+  inference, progress/error states, confidence, threshold, and top-3 results.
+  Its launcher is `run_krsl_gui.bat`; tkinter 8.6 requires no extra package.
+  Runtime asset validation and a create/layout/destroy GUI smoke test passed.
 
 ## Commands
 
@@ -83,9 +87,9 @@ ruff format --check .
 
 ## Next phase gate
 
-- Test the published v3 checkpoint on newly recorded clips, especially `kak`,
+- Test the desktop application on newly recorded clips, especially `kak`,
   `what`, and their question variants, and record accepted/`UNKNOWN` outcomes.
-- Add a landmark overlay for visual inspection before starting webcam mode.
+- Add a landmark overlay/video preview before starting webcam mode.
 
 ## Known constraints
 

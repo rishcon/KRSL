@@ -114,6 +114,11 @@ file onto the batch file. The recognizer uses the current primary checkpoint,
 `models/lstm-handcentric-v3.pt`, and returns `UNKNOWN` below its calibrated 59%
 confidence threshold.
 
+For convenient desktop testing, double-click `run_krsl_gui.bat`. The tkinter
+application lets you choose one video and shows the recognized label,
+confidence, calibrated threshold, and top three candidates without freezing
+while MediaPipe processes the file.
+
 Analyze its held-out P1 errors:
 
 ```powershell
