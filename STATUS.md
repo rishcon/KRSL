@@ -37,6 +37,8 @@
 - Added a CPU/GPU-aware bidirectional LSTM baseline. A one-epoch smoke run
   completed with checkpoint and metrics output; the 30-epoch training launcher
   is `train_lstm_baseline.bat`.
+- Added a compact masked Transformer experiment for direct comparison on the
+  same `training-sequence-v2` data and signer-independent splits.
 
 ## Commands
 

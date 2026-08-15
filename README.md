@@ -96,6 +96,9 @@ Start the first recognizer by running `train_lstm_baseline.bat`. Its metrics and
 best local checkpoint are saved under `reports/experiments/lstm-baseline/`.
 The verified baseline checkpoint is published as `models/lstm-baseline-v1.pt`.
 
+Run `train_transformer.bat` to compare a compact Transformer against the
+velocity BiLSTM on the same signer-independent splits.
+
 Analyze its held-out P1 errors:
 
 ```powershell
